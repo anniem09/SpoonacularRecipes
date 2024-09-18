@@ -1,21 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+import Cuisine from './Cuisine';
 
 const DataComponent = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [query, setQuery] = useState('');
+    const [selectedCuisine, setSelectedCuisine] = useState('');
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
+
+    const cuisines = [
+        'African',
+        'Asian',
+        'American',
+        'British',
+        'Cajun',
+        'Caribbean',
+        'Chinese',
+        'Eastern European',
+        'European',
+        'French',
+        'German',
+        'Greek',
+        'Indian',
+        'Irish',
+        'Italian',
+        'Japanese',
+        'Jewish',
+        'Korean',
+        'Latin American',
+        'Mediterranean',
+        'Mexican',
+        'Middle Eastern',
+        'Nordic',
+        'Southern',
+        'Spanish',
+        'Thai',
+        'Vietnamese'
+    ];
 
     useEffect(() => {
 
         //Retrieve Recipes from spoonacular API
-        //Need to un-hardcode query parameter
         const fetchData = async () => {
             try {
-                const response = await fetch('https://api.spoonacular.com/recipes/complexSearch?cuisine=Italian', {
+                const cuisineParam = selectedCuisine ? `&cuisine=${selectedCuisine}` : '';
+                const searchParam = query ? `query=${query}` : '';
+
+                const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?${searchParam}${cuisineParam}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -32,6 +69,7 @@ const DataComponent = () => {
 
                 setData(results);
                 setLoading(false);
+                setCurrentPage(1);
 
             } catch (error) {
                 console.error('Fetch failed:', error);
@@ -41,7 +79,7 @@ const DataComponent = () => {
         };
 
         fetchData();
-    }, []);
+    }, [query, selectedCuisine]);
 
     //Handle Pagination
     //Calculate total pages based on returned recipe count
@@ -57,6 +95,12 @@ const DataComponent = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
 
+    const handleSearch = (searchTerm) => {
+        setQuery(searchTerm);
+    };
+
+    const handleCuisineChange = (cuisine) => setSelectedCuisine(cuisine);
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
@@ -65,6 +109,10 @@ const DataComponent = () => {
     return (
         <div>
             <h1>Recipes</h1>
+
+            <SearchBar onSearch={handleSearch} />
+            <Cuisine cuisines={cuisines} selectedCuisine={selectedCuisine} onCuisineChange={handleCuisineChange} />
+
             <ul>
                 {currentData.length > 0 ? (
                     currentData.slice(0, 10).map((item) => (
