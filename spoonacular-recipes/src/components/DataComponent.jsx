@@ -47,36 +47,48 @@ const DataComponent = () => {
     ];
 
     useEffect(() => {
-
-        //Retrieve Recipes from spoonacular API
         const fetchData = async () => {
-            try {
-                const cuisineParam = selectedCuisine ? `&cuisine=${selectedCuisine}` : '';
-                const searchParam = query ? `query=${query}` : '';
+            const storedData = localStorage.getItem('recipes');
+            const storedCuisine = localStorage.getItem('selectedCuisine');
+            const storedQuery = localStorage.getItem('query');
 
-                const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?${searchParam}${cuisineParam}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': '799f17f427f745cfa3909c2030949b5f',
-                    },
-                });
+            //Check if data already loaded, if not fetch from api and store
+            if (storedData && storedCuisine === selectedCuisine && storedQuery === query) {
+                setData(JSON.parse(storedData));
+                setLoading(false);
+            } else {
+                try {
+                    const cuisineParam = selectedCuisine ? `&cuisine=${selectedCuisine}` : '';
+                    const searchParam = query ? `query=${query}` : '';
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                    const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?${searchParam}${cuisineParam}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': '799f17f427f745cfa3909c2030949b5f',
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const results = result.results || [];
+
+                    setData(results);
+                    setLoading(false);
+                    setCurrentPage(1);
+
+                    localStorage.setItem('recipes', JSON.stringify(results));
+                    localStorage.setItem('selectedCuisine', selectedCuisine);
+                    localStorage.setItem('query', query);
+
+                } catch (error) {
+                    console.error('Fetch failed:', error);
+                    setError(error);
+                    setLoading(false);
                 }
-
-                const result = await response.json();
-                const results = result.results || [];
-
-                setData(results);
-                setLoading(false);
-                setCurrentPage(1);
-
-            } catch (error) {
-                console.error('Fetch failed:', error);
-                setError(error);
-                setLoading(false);
             }
         };
 
@@ -84,13 +96,11 @@ const DataComponent = () => {
     }, [query, selectedCuisine]);
 
     //Handle Pagination
-    //Calculate total pages based on returned recipe count
     const totalPages = Math.ceil(data.length / itemsPerPage);
     const startingIndex = (currentPage - 1) * itemsPerPage;
     const currentData = data.slice(startingIndex, startingIndex + itemsPerPage);
 
-
-    //Event handlers
+    // Event handlers
     const handleNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
@@ -133,40 +143,39 @@ const DataComponent = () => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-
     //Return RecipeDetail Page when a recipe is selected
     if (selectedRecipe) {
         return <RecipeDetail recipe={selectedRecipe} onBack={handleBack} />;
     }
 
-    //Returning simple list of recipes
-    //Filtered by current page set of data
+    //Returning paginated list of recipes
     return (
         <div>
-            <h1>Recipes</h1>
-
             <SearchBar onSearch={handleSearch} />
             <Cuisine cuisines={cuisines} selectedCuisine={selectedCuisine} onCuisineChange={handleCuisineChange} />
 
-            <ul>
-                {currentData.length > 0 ? (
-                    currentData.slice(0, 10).map((item) => (
-                        <li key={item.id} onClick={() => handleRecipeClick(item.id)}>
-                            <strong>{item.title}</strong>
-                            <img src={item.image} alt={item.title} />
-                        </li>
-                    ))
-                ) : (
-                    <p>No Recipes available</p>
-                )}
-            </ul>
+            <div className='recipesList'>
+                <ul>
+                    {currentData.length > 0 ? (
+                        currentData.slice(0, 10).map((item) => (
+                            <li key={item.id} onClick={() => handleRecipeClick(item.id)}>
+                                <img src={item.image} alt={item.title} className='recipePic' />
+                                <p>{item.title}</p>
+                            </li>
+                        ))
+                    ) : (
+                        <p>No Recipes available</p>
+                    )}
 
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handleNextPage={handleNextPage}
-                handlePrevPage={handlePrevPage}
-            />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        handleNextPage={handleNextPage}
+                        handlePrevPage={handlePrevPage}
+                    />
+                </ul>
+
+            </div>
         </div>
     );
 };

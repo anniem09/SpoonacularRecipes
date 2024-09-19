@@ -1,6 +1,8 @@
-* {
-  box-sizing: border-box;
+html,
+body {
   background-color: #F5EFD7;
+  width: 100vw;
+  box-sizing: border-box;
 }
 
 body {
@@ -14,7 +16,7 @@ nav {
   height: 100px;
   width: 100%;
   display: flex;
-  padding: 10px 36px;
+  padding: 10px 0;
   justify-content: center;
   background-color: #3B7339;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
@@ -27,10 +29,179 @@ h1 {
 }
 
 .tags {
-  display: 'inline-block';
-  padding: '5px 10px';
-  margin: '5px';
-  background-color: '#e0e0e0';
-  border-radius: '5px';
-  font-size: '12px';
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2.5% auto;
+  padding: 10px 0;
+  max-width: 60%;
+}
+
+input[type="text"] {
+  width: 100%;
+  background-color: white;
+  padding: 10px;
+  margin-right: 10px;
+  border: 2px solid #3B7339;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+select {
+  max-width: fit-content;
+  background-color: white;
+  padding: 5px;
+  border: none;
+  outline: none;
+  color: #3B7339;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-left: 20%;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #3B7339;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+button:disabled:hover {
+  background-color: inherit;
+  color: inherit;
+  cursor: inherit;
+}
+
+.NextButton {
+  margin-left: 2rem;
+}
+
+.PrevButton {
+  margin-right: 2rem;
+}
+
+.NextButton,
+.PrevButton {
+  background-color: white;
+  color: #3B7339;
+  border: 2px solid #3B7339;
+  width: 7rem;
+}
+
+.NextButton:hover,
+.PrevButton:hover {
+  background-color: white;
+  width: 7rem;
+  transition: none;
+}
+
+.Pagination {
+  margin: 2rem auto;
+  width: fit-content;
+}
+
+.recipesList {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  border-radius: 8px;
+  width: 60%;
+  list-style-type: none;
+  background-color: white;
+  padding-left: 0;
+}
+
+li {
+  background-color: #3B7339;
+  color: white;
+  display: flex;
+  align-items: center;
+  margin: 2.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  transition: background-color 0.3s ease;
+}
+
+li:hover {
+  background-color: #45a049;
+}
+
+.recipePic {
+  width: 25%;
+  display: inline;
+  margin-right: 2.5rem;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+@media (max-width: 500px) {
+  form {
+    max-width: 90%;
+    flex-direction: column;
+  }
+
+  .SearchButton {
+    margin-bottom: 2.5rem;
+  }
+
+  input[type="text"] {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .recipePic {
+    display: block;
+  }
+
+  li {
+    margin: 3%;
+    font-size: 0.75rem;
+  }
+
+  ul {
+    width: 90%;
+  }
+
+  select {
+    margin-left: 5%;
+  }
+
+  .NextButton,
+  .PrevButton {
+    width: 5rem;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    width: 5rem;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
 }
