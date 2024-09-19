@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import Cuisine from './Cuisine';
+import RecipeDetail from './RecipeDetail';
 
 const DataComponent = () => {
     const [data, setData] = useState([]);
@@ -10,6 +11,7 @@ const DataComponent = () => {
 
     const [query, setQuery] = useState('');
     const [selectedCuisine, setSelectedCuisine] = useState('');
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
@@ -87,6 +89,8 @@ const DataComponent = () => {
     const startingIndex = (currentPage - 1) * itemsPerPage;
     const currentData = data.slice(startingIndex, startingIndex + itemsPerPage);
 
+
+    //Event handlers
     const handleNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
@@ -101,8 +105,39 @@ const DataComponent = () => {
 
     const handleCuisineChange = (cuisine) => setSelectedCuisine(cuisine);
 
+    const handleRecipeClick = async (recipeId) => {
+        try {
+            const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': '799f17f427f745cfa3909c2030949b5f',
+                },
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const recipeDetail = await response.json();
+            setSelectedRecipe(recipeDetail);
+
+        } catch (error) {
+            console.error('Failed to fetch recipe details:', error);
+            setError(error);
+        }
+    };
+
+    const handleBack = () => {
+        setSelectedRecipe(null);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
+
+
+    //Return RecipeDetail Page when a recipe is selected
+    if (selectedRecipe) {
+        return <RecipeDetail recipe={selectedRecipe} onBack={handleBack} />;
+    }
 
     //Returning simple list of recipes
     //Filtered by current page set of data
@@ -116,7 +151,7 @@ const DataComponent = () => {
             <ul>
                 {currentData.length > 0 ? (
                     currentData.slice(0, 10).map((item) => (
-                        <li key={item.id}>
+                        <li key={item.id} onClick={() => handleRecipeClick(item.id)}>
                             <strong>{item.title}</strong>
                             <img src={item.image} alt={item.title} />
                         </li>
