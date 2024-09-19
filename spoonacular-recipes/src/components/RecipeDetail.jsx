@@ -21,38 +21,41 @@ export default function RecipeDetail({ recipe, onBack }) {
     console.log('Recipe:', recipe.instructions);
 
     return (
-        <div>
-            <h2>{recipe.title}</h2>
-            <img src={recipe.image} alt={recipe.title} />
+        <div className='wrapper'>
+            <div className='detailWrapper'>
+                <h2>{recipe.title}</h2>
+                <div className='imgContainer'>
+                    <img src={recipe.image} alt={recipe.title} className='RecipeDetailImg' />
+                </div>
+                {/*Health Tags*/}
+                <div className='tagsContainer'>
+                    {tags.length > 0 ? (
+                        tags.map((tag, index) => (
+                            <span key={index} className='tags'>
+                                {tag}
+                            </span>
+                        ))
+                    ) : (
+                        <p>No dietary information available</p>
+                    )}
+                </div>
 
-            {/*Health Tags*/}
-            <div>
-                {tags.length > 0 ? (
-                    tags.map((tag, index) => (
-                        <span key={index} className={tags}>
-                            {tag}
-                        </span>
-                    ))
-                ) : (
-                    <p>No dietary information available</p>
-                )}
+                <div className='ingredientsContainer'>
+                    <h3>Ingredients</h3>
+                    <ul className='ingredientList'>
+                        {recipe.extendedIngredients.map((ingredient) => (
+                            <Ingredient
+                                key={ingredient.id}
+                                name={ingredient.original}
+                            />
+                        ))}
+                    </ul>
+                </div>
+
+                <InstructionList instructions={recipe.instructions} />
             </div>
 
-            <div>
-                <h3>Ingredients</h3>
-                <ul>
-                    {recipe.extendedIngredients.map((ingredient) => (
-                        <Ingredient
-                            key={ingredient.id}
-                            name={ingredient.original}
-                        />
-                    ))}
-                </ul>
-            </div>
-
-            <InstructionList instructions={recipe.instructions} />
-
-            <button onClick={onBack}>Back to Recipes</button>
+            <button onClick={onBack} className='backButton'>Back to Recipes</button>
         </div>
     );
 };

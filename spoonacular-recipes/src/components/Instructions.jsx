@@ -5,9 +5,9 @@ export default function InstructionList({ instructions }) {
     const steps = instructions.split('.').filter(Boolean);
 
     return (
-        <div>
-            <h1>Instructions</h1>
-            <ol>
+        <div className='instructionsContainer'>
+            <h3>Instructions</h3>
+            <ol className='numberedList'>
                 {steps.map((step, index) => (
                     <li key={index}>{step.trim()}.</li>
                 ))}

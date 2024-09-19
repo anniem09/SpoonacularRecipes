@@ -28,13 +28,11 @@ h1 {
   padding: 5rem;
 }
 
-.tags {
-  display: inline-block;
-  padding: 5px 10px;
-  margin: 5px;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  font-size: 12px;
+
+h2 {
+  margin: auto;
+  text-align: center;
+  padding: 3rem;
 }
 
 form {
@@ -204,4 +202,157 @@ li:hover {
     font-size: 0.75rem;
     padding: 5px 10px;
   }
+}
+
+/* Recipe Detail */
+
+.wrapper {
+  width: 50%;
+  margin: 2.5rem auto;
+  background-color: #F5EFD7;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailWrapper {
+  background-color: white;
+  border-radius: 8px;
+}
+
+h3 {
+  margin: auto;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.RecipeDetailImg {
+  max-width: 90%;
+}
+
+.tags {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 1rem 0.5rem;
+  background-color: #3B7339;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.tagsContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.ingredientsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 95%;
+}
+
+.ingredientList {
+  margin: auto;
+  justify-content: center;
+  width: 80%;
+  margin-top: 2rem;
+  list-style-type: disc;
+}
+
+.ingredientList li {
+  background-color: white;
+  color: #3B7339;
+  list-style-type: disc;
+  font-size: 1rem;
+  margin: 1rem;
+  cursor: default;
+}
+
+.numberedList {
+  margin: auto;
+  justify-content: center;
+  width: 80%;
+  margin-top: 2rem;
+  list-style-type: decimal;
+}
+
+.numberedList li {
+  background-color: white;
+  color: #3B7339;
+  list-style-type: disc;
+  font-size: 1rem;
+  margin: 1rem;
+  cursor: default;
+}
+
+.instructionsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 95%;
+}
+
+ol {
+  background-color: white;
+  border-radius: 8px;
+  width: 60%;
+  padding-left: 0;
+}
+
+.backButton {
+  width: fit-content;
+  margin: 1rem auto;
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    width: 90%;
+  }
+
+  .RecipeDetailImg {
+    max-width: 90%;
+  }
+
+  h2 {
+    padding: 1rem;
+  }
+
+  h3 {
+    padding-top: 1rem;
+  }
+
+  .tags {
+    padding: 5px;
+    margin: 0.5rem 0.25rem;
+    background-color: #3B7339;
+    color: white;
+    border-radius: 5px;
+    font-size: 10px;
+  }
+
+  .ingredientsContainer {
+    width: 100%;
+  }
+
+  .ingredientList {
+    width: 90%;
+    margin-top: 0.5rem;
+  }
+
+  .numberedList {
+    width: 90%;
+    margin-top: 0.5rem;
+  }
+
+  .instructionsContainer {
+    width: 100%;
+  }
+
 }
